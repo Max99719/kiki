@@ -8,7 +8,6 @@
 <!-- Turnstile script -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
- /* All your CSS unchanged, preserve exactly as before */
  * {
     box-sizing: border-box;
     margin: 0;
@@ -385,18 +384,10 @@
       <h1>Kimi Antonelli Latest News</h1>
       <div class="nav-wrapper">
         <ul class="nav-menu">
-          <li class="nav-item">
-            <a href="#" class="nav-link active">News</a>
-          </li>
-          <li class="nav-item">
-            <a href="reddit.html" class="nav-link">Kimi on REDDIT</a>
-          </li>
-          <li class="nav-item">
-            <a href="memes.html" class="nav-link">MEMES</a>
-          </li>
-          <li class="nav-item">
-            <a href="about.html" class="nav-link">About</a>
-          </li>
+          <li class="nav-item"><a href="#" class="nav-link active">News</a></li>
+          <li class="nav-item"><a href="reddit.html" class="nav-link">Kimi on REDDIT</a></li>
+          <li class="nav-item"><a href="memes.html" class="nav-link">MEMES</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
         </ul>
       </div>
     </div>
@@ -407,6 +398,14 @@
       <div class="loading">Loading Kimi Antonelli news...</div>
     </div>
   </main>
+
+  <!-- Turnstile widget -->
+  <div id="cf-turnstile" 
+       class="cf-challenge" 
+       data-sitekey="0x4AAAAAABughzSZevIX1w74" 
+       data-callback="onTurnstileSuccess" 
+       data-size="compact">
+  </div>
 
 <script>
 const workerURL = 'https://kiminews.malasadi578.workers.dev/';
@@ -420,40 +419,28 @@ function stripHTML(html) {
 
 document.addEventListener('DOMContentLoaded', function() {
   const navLinks = document.querySelectorAll('.nav-link');
-  
   navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
-      if (this.classList.contains('disabled')) {
-        e.preventDefault();
-        return;
-      }
-      
-      if (this.getAttribute('href') === 'reddit.html') {
-        return;
-      }
-      
-      if (this.getAttribute('href') === '#') {
-        e.preventDefault();
-      }
-      
+      if (this.classList.contains('disabled')) { e.preventDefault(); return; }
+      if (this.getAttribute('href') === '#') e.preventDefault();
       navLinks.forEach(l => l.classList.remove('active'));
-      
-      if (!this.classList.contains('disabled')) {
-        this.classList.add('active');
-      }
+      if (!this.classList.contains('disabled')) this.classList.add('active');
     });
   });
 
-  // Wait for Turnstile to render and execute
+  // Render Turnstile widget once
   waitForTurnstileAndRender();
+
+  // Load articles immediately without waiting
+  loadArticles();
 });
 
+// Store token globally
 let turnstileToken = null;
-let widgetId = null;
+let turnstileWidgetId = null;
 
 function onTurnstileSuccess(token) {
   turnstileToken = token;
-  loadArticles();
 }
 
 function waitForTurnstileAndRender() {
@@ -462,53 +449,47 @@ function waitForTurnstileAndRender() {
     return;
   }
 
-  if (widgetId === null) {
-    widgetId = turnstile.render(document.body, {
+  if (!turnstileWidgetId) {
+    turnstileWidgetId = turnstile.render('#cf-turnstile', {
       sitekey: '0x4AAAAAABughzSZevIX1w74',
-      size: 'invisible',
+      size: 'compact',
       callback: onTurnstileSuccess
     });
-    turnstile.execute(widgetId);
   }
 }
 
 async function loadArticles() {
-  if (!turnstileToken) {
-    if (window.turnstile && widgetId !== null) {
-      turnstile.execute(widgetId);
-    }
-    return;
-  }
-
   const container = document.getElementById('newsContainer');
   container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
   
   try {
-    const response = await fetch(workerURL, {
-      headers: { 'cf-turnstile-response': turnstileToken }
-    });
+    // Ensure Turnstile executed if we don’t have a token yet
+    if (!turnstileToken && turnstileWidgetId !== null) {
+      turnstile.reset(turnstileWidgetId);
+      turnstile.execute(turnstileWidgetId);
+    }
+
+    const headers = turnstileToken ? { 'cf-turnstile-response': turnstileToken } : {};
+
+    const response = await fetch(workerURL, { headers });
     const articles = await response.json();
-    
+
     if (!Array.isArray(articles) || articles.length === 0) {
       container.innerHTML = '<div class="error">No articles found about Kimi Antonelli.</div>';
       return;
     }
-    
+
     container.innerHTML = '';
-    
     articles.forEach(article => {
       const articleElement = document.createElement('article');
       articleElement.className = 'article-card';
-      
+
       const cleanDescription = stripHTML(article.description).slice(0, 140) + "...";
       const formattedDate = new Date(article.pubDate).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
+        month: 'short', day: 'numeric', year: 'numeric'
       });
-      
       const imageUrl = article.image || placeholderImage;
-      
+
       articleElement.innerHTML = `
         <div class="article-image">
           <img src="${imageUrl}" alt="${article.title}" loading="lazy">
@@ -516,9 +497,7 @@ async function loadArticles() {
         <div class="article-content">
           <div class="article-text-content">
             <div class="article-meta">${formattedDate}</div>
-            <h2 class="article-title">
-              <a href="${article.link}" target="_blank">${article.title}</a>
-            </h2>
+            <h2 class="article-title"><a href="${article.link}" target="_blank">${article.title}</a></h2>
             <p class="article-excerpt">${cleanDescription}</p>
           </div>
           <div class="article-actions">
@@ -526,7 +505,6 @@ async function loadArticles() {
           </div>
         </div>
       `;
-      
       container.appendChild(articleElement);
     });
   } catch (error) {
