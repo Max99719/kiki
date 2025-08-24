@@ -8,6 +8,7 @@
 <!-- Turnstile script -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
+ /* All your CSS unchanged, preserve exactly as before */
  * {
     box-sizing: border-box;
     margin: 0;
@@ -407,14 +408,6 @@
     </div>
   </main>
 
-  <!-- Turnstile widget -->
-  <div id="cf-turnstile" 
-       class="cf-challenge" 
-       data-sitekey="0x4AAAAAABughzSZevIX1w74" 
-       data-callback="onTurnstileSuccess" 
-       data-size="compact">
-  </div>
-
 <script>
 const workerURL = 'https://kiminews.malasadi578.workers.dev/';
 const placeholderImage = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80';
@@ -425,8 +418,38 @@ function stripHTML(html) {
   return div.textContent || div.innerText || "";
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  const navLinks = document.querySelectorAll('.nav-link');
+  
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      if (this.classList.contains('disabled')) {
+        e.preventDefault();
+        return;
+      }
+      
+      if (this.getAttribute('href') === 'reddit.html') {
+        return;
+      }
+      
+      if (this.getAttribute('href') === '#') {
+        e.preventDefault();
+      }
+      
+      navLinks.forEach(l => l.classList.remove('active'));
+      
+      if (!this.classList.contains('disabled')) {
+        this.classList.add('active');
+      }
+    });
+  });
+
+  // Wait for Turnstile to render and execute
+  waitForTurnstileAndRender();
+});
+
 let turnstileToken = null;
-let turnstileWidgetId = null;
+let widgetId = null;
 
 function onTurnstileSuccess(token) {
   turnstileToken = token;
@@ -438,20 +461,21 @@ function waitForTurnstileAndRender() {
     setTimeout(waitForTurnstileAndRender, 100);
     return;
   }
-  if (turnstileWidgetId === null) {
-    turnstileWidgetId = turnstile.render('#cf-turnstile', {
+
+  if (widgetId === null) {
+    widgetId = turnstile.render(document.body, {
       sitekey: '0x4AAAAAABughzSZevIX1w74',
-      size: 'compact',
+      size: 'invisible',
       callback: onTurnstileSuccess
     });
+    turnstile.execute(widgetId);
   }
 }
 
 async function loadArticles() {
   if (!turnstileToken) {
-    if (window.turnstile && turnstileWidgetId !== null) {
-      turnstile.reset(turnstileWidgetId);
-      turnstile.execute(turnstileWidgetId);
+    if (window.turnstile && widgetId !== null) {
+      turnstile.execute(widgetId);
     }
     return;
   }
@@ -482,6 +506,7 @@ async function loadArticles() {
         day: 'numeric',
         year: 'numeric'
       });
+      
       const imageUrl = article.image || placeholderImage;
       
       articleElement.innerHTML = `
@@ -509,25 +534,6 @@ async function loadArticles() {
     container.innerHTML = '<div class="error">Error loading news. Please try again later.</div>';
   }
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-  const navLinks = document.querySelectorAll('.nav-link');
-  
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      if (this.classList.contains('disabled')) {
-        e.preventDefault();
-        return;
-      }
-      if (this.getAttribute('href') === 'reddit.html') return;
-      if (this.getAttribute('href') === '#') e.preventDefault();
-      navLinks.forEach(l => l.classList.remove('active'));
-      if (!this.classList.contains('disabled')) this.classList.add('active');
-    });
-  });
-
-  waitForTurnstileAndRender();
-});
 </script>
 </body>
 </html>
