@@ -408,7 +408,12 @@
   </main>
 
   <!-- Invisible Turnstile widget -->
-  <div id="cf-turnstile" class="cf-challenge" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-size="invisible"></div>
+  <div id="cf-turnstile" 
+       class="cf-challenge" 
+       data-sitekey="0x4AAAAAABughzSZevIX1w74" 
+       data-callback="onTurnstileSuccess" 
+       data-size="invisible">
+  </div>
 
 <script>
 const workerURL = 'https://kiminews.malasadi578.workers.dev/';
@@ -420,48 +425,68 @@ function stripHTML(html) {
   return div.textContent || div.innerText || "";
 }
 
-// Nav link handling (unchanged)
 document.addEventListener('DOMContentLoaded', function() {
   const navLinks = document.querySelectorAll('.nav-link');
+  
   navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
       if (this.classList.contains('disabled')) {
         e.preventDefault();
         return;
       }
-      if (this.getAttribute('href') === 'reddit.html') return;
-      if (this.getAttribute('href') === '#') e.preventDefault();
+      
+      if (this.getAttribute('href') === 'reddit.html') {
+        return;
+      }
+      
+      if (this.getAttribute('href') === '#') {
+        e.preventDefault();
+      }
+      
       navLinks.forEach(l => l.classList.remove('active'));
-      if (!this.classList.contains('disabled')) this.classList.add('active');
+      
+      if (!this.classList.contains('disabled')) {
+        this.classList.add('active');
+      }
     });
   });
 
-  waitForTurnstileAndRender(); // render Turnstile safely
+  // Wait for Turnstile script to load and render widget
+  waitForTurnstileAndRender();
 });
 
 // store token globally after Turnstile succeeds
 let turnstileToken = null;
+let turnstileRendered = false;
+
 function onTurnstileSuccess(token) {
   turnstileToken = token;
-  loadArticles(); // safe to fetch now
+  loadArticles(); // now safe to fetch
 }
 
-// Wait for Turnstile script to load before rendering
 function waitForTurnstileAndRender() {
-  if (window.turnstile) {
-    window.turnstile.render('#cf-turnstile', {
-      sitekey: 'YOUR_TURNSTILE_SITE_KEY',
+  if (!window.turnstile) {
+    setTimeout(waitForTurnstileAndRender, 100);
+    return;
+  }
+
+  if (!turnstileRendered) {
+    turnstile.render('#cf-turnstile', {
+      sitekey: '0x4AAAAAABughzSZevIX1w74',
       size: 'invisible',
       callback: onTurnstileSuccess
     });
-  } else {
-    setTimeout(waitForTurnstileAndRender, 50);
+    turnstileRendered = true;
+    turnstile.execute('#cf-turnstile');
   }
 }
 
 async function loadArticles() {
   if (!turnstileToken) {
-    if (window.turnstile) window.turnstile.execute(document.getElementById("cf-turnstile"));
+    // If token not ready, execute widget again
+    if (window.turnstile && turnstileRendered) {
+      turnstile.execute('#cf-turnstile');
+    }
     return;
   }
 
