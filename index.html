@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kimi Antonelli Latest News</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- Turnstile script -->
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-
   <style>
     * {
       box-sizing: border-box;
@@ -299,8 +295,7 @@
       transform: scale(1.05);
     }
 
-    .loading,
-    .error {
+    .loading, .error {
       text-align: center;
       padding: 48px 24px;
       color: #555555;
@@ -319,12 +314,8 @@
     }
 
     @keyframes shimmer {
-      0% {
-        background-position: -200% 0;
-      }
-      100% {
-        background-position: 200% 0;
-      }
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
     }
 
     @media (max-width: 768px) {
@@ -371,6 +362,7 @@
     }
   </style>
 </head>
+
 <body>
   <header class="header">
     <div class="header-container">
@@ -400,15 +392,8 @@
     </div>
   </main>
 
-  <!-- Compact Turnstile widget -->
-  <div id="cf-turnstile" class="cf-turnstile"
-       data-sitekey="0x4AAAAAABughzSZevIX1w74"
-       data-callback="onTurnstileSuccess"
-       data-size="compact">
-  </div>
-
   <script>
-    const workerURL = 'https://kiminews.malasadi578.workers.dev/';
+    const workerURL = 'https://kimi2.malasadi578.workers.dev/';
     const placeholderImage = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80';
 
     function stripHTML(html) {
@@ -425,40 +410,26 @@
             e.preventDefault();
             return;
           }
-          if (this.getAttribute('href') === 'reddit.html') return;
-          if (this.getAttribute('href') === '#') e.preventDefault();
+          if (this.getAttribute('href') === 'reddit.html') {
+            return;
+          }
+          if (this.getAttribute('href') === '#') {
+            e.preventDefault();
+          }
           navLinks.forEach(l => l.classList.remove('active'));
-          if (!this.classList.contains('disabled')) this.classList.add('active');
+          if (!this.classList.contains('disabled')) {
+            this.classList.add('active');
+          }
         });
       });
-
-      // Only render Turnstile once
-      if (window.turnstile) {
-        turnstile.render('#cf-turnstile', {
-          sitekey: '0x4AAAAAABughzSZevIX1w74',
-          size: 'compact',
-          callback: onTurnstileSuccess
-        });
-      }
     });
 
-    let turnstileToken = null;
-
-    function onTurnstileSuccess(token) {
-      if (turnstileToken === token) return;
-      turnstileToken = token;
-      loadArticles();
-    }
-
     async function loadArticles() {
-      if (!turnstileToken) return;
       const container = document.getElementById('newsContainer');
       container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
 
       try {
-        const response = await fetch(workerURL, {
-          headers: { 'cf-turnstile-response': turnstileToken }
-        });
+        const response = await fetch(workerURL);
         const articles = await response.json();
 
         if (!Array.isArray(articles) || articles.length === 0) {
@@ -471,11 +442,8 @@
         articles.forEach(article => {
           const articleElement = document.createElement('article');
           articleElement.className = 'article-card';
-
           const cleanDescription = stripHTML(article.description).slice(0, 140) + "...";
-          const formattedDate = new Date(article.pubDate).toLocaleDateString('en-US', {
-            month: 'short', day: 'numeric', year: 'numeric'
-          });
+          const formattedDate = new Date(article.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
           const imageUrl = article.image || placeholderImage;
 
           articleElement.innerHTML = `
@@ -498,12 +466,13 @@
 
           container.appendChild(articleElement);
         });
-
       } catch (error) {
         console.error('Error loading articles:', error);
         container.innerHTML = '<div class="error">Error loading news. Please try again later.</div>';
       }
     }
+
+    loadArticles();
   </script>
 </body>
 </html>
