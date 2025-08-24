@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f1f3f5;
+    color: #222222;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .header-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  h1 {
+    text-align: center;
+    margin: 0 0 12px 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: #dc2626;
+    letter-spacing: -0.03em;
+  }
+
+  .nav-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .nav-menu {
+    display: flex;
+    background: #ffffff;
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    padding: 4px;
+    gap: 12px;
+    list-style: none;
+    margin: 0 auto;
+    width: 70%;
+    max-width: 700px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex-wrap: nowrap; /* default for desktop */
+  }
+
+  .nav-menu::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-item {
+    flex-shrink: 0;
+  }
+
+  .nav-link {
+    display: block;
+    padding: 8px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #333333;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .nav-link:hover {
+    background: #dc2626;
+    color: #ffffff;
+    transform: scale(1.05);
+  }
+
+  .nav-link.active {
+    background: #dc2626;
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 48px 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .section:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+
+  .section h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    color: #dc2626;
+    margin-bottom: 16px;
+  }
+
+  .section p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333333;
+  }
+
+  @media (max-width: 768px) {
+    .header {
+      padding: 10px 0;
+    }
+
+    .header-container {
+      padding: 0 12px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    /* Wrap nav items on smaller screens and center them */
+    .nav-menu {
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      padding: 3px;
+      gap: 8px;
+      border-radius: 8px;
+    }
+
+    .nav-link {
+      padding: 6px 12px;
+      font-size: 15px;
+    }
+
+    .section {
+      padding: 32px 16px;
+    }
+    .section h2 {
+      font-size: 24px;
+    }
+    .section p {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 24px;
+    }
+
+    .nav-link {
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+
+    .section {
+      padding: 24px 12px;
+    }
+    .section h2 {
+      font-size: 22px;
+    }
+    .section p {
+      font-size: 15px;
+    }
+  }
+</style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-container">
+      <h1>KimiAntonelli.org</h1>
+      <div class="nav-wrapper">
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="index.html" class="nav-link">Latest News</a></li>
+          <li class="nav-item"><a href="reddit.html" class="nav-link">Kimi on REDDIT</a></li>
+          <li class="nav-item"><a href="memes.html" class="nav-link">Kimi MEMES</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link active">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="section">
+      <h2>What does this website do?</h2>
+      <p>-This website automatically scans the web for any articles mentioning F1 Driver Kimi Antonelli. Then it displays a title and a link to these articles, sorted by date. 
+        It also scans r/formula1 for the latest posts mentioning Kimi.
+      </p>
+    </div>
+    
+    <div class="section">
+      <h2>Contact</h2>
+      <p>For new feature requests/ideas, follow and DM @KimiAntF1 on X</p>
+    </div>
+
+    <div class="section">
+      <h2>Support</h2>
+      <p><a href="https://beacons.ai/kimi_antonelli_news"> https://beacons.ai/kimi_antonelli_news</a></p>
+    </div>
+  </main>
+</body>
+</html>
