@@ -5,10 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kimi Antonelli Latest News</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-<!-- Turnstile script -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
- * {
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -399,13 +398,8 @@
     </div>
   </main>
 
-  <!-- Turnstile widget -->
-  <div id="cf-turnstile" 
-       class="cf-challenge" 
-       data-sitekey="0x4AAAAAABughzSZevIX1w74" 
-       data-callback="onTurnstileSuccess" 
-       data-size="compact">
-  </div>
+  <!-- Widget container is empty; will be rendered via JS -->
+  <div id="cf-turnstile-container" style="display:none;"></div>
 
 <script>
 const workerURL = 'https://kiminews.malasadi578.workers.dev/';
@@ -418,60 +412,57 @@ function stripHTML(html) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  const navLinks = document.querySelectorAll('.nav-link');
-  navLinks.forEach(link => {
+  // Nav active state
+  document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function(e) {
       if (this.classList.contains('disabled')) { e.preventDefault(); return; }
       if (this.getAttribute('href') === '#') e.preventDefault();
-      navLinks.forEach(l => l.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
       if (!this.classList.contains('disabled')) this.classList.add('active');
     });
   });
 
-  // Render Turnstile widget once
-  waitForTurnstileAndRender();
-
-  // Load articles immediately without waiting
-  loadArticles();
+  // Initialize Turnstile once
+  waitForTurnstileAndLoadArticles();
 });
 
-// Store token globally
+// GLOBALS
 let turnstileToken = null;
 let turnstileWidgetId = null;
 
 function onTurnstileSuccess(token) {
   turnstileToken = token;
+  loadArticles(); // fetch only after token ready
 }
 
-function waitForTurnstileAndRender() {
+function waitForTurnstileAndLoadArticles() {
   if (!window.turnstile) {
-    setTimeout(waitForTurnstileAndRender, 100);
+    setTimeout(waitForTurnstileAndLoadArticles, 100);
     return;
   }
 
   if (!turnstileWidgetId) {
-    turnstileWidgetId = turnstile.render('#cf-turnstile', {
+    turnstileWidgetId = turnstile.render('#cf-turnstile-container', {
       sitekey: '0x4AAAAAABughzSZevIX1w74',
-      size: 'compact',
+      size: 'compact', // valid size
       callback: onTurnstileSuccess
     });
   }
+
+  // Execute the widget to get token
+  turnstile.execute(turnstileWidgetId);
 }
 
 async function loadArticles() {
   const container = document.getElementById('newsContainer');
   container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
-  
+
+  if (!turnstileToken) return; // wait until token ready
+
   try {
-    // Ensure Turnstile executed if we don’t have a token yet
-    if (!turnstileToken && turnstileWidgetId !== null) {
-      turnstile.reset(turnstileWidgetId);
-      turnstile.execute(turnstileWidgetId);
-    }
-
-    const headers = turnstileToken ? { 'cf-turnstile-response': turnstileToken } : {};
-
-    const response = await fetch(workerURL, { headers });
+    const response = await fetch(workerURL, {
+      headers: { 'cf-turnstile-response': turnstileToken }
+    });
     const articles = await response.json();
 
     if (!Array.isArray(articles) || articles.length === 0) {
