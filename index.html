@@ -410,16 +410,10 @@
             e.preventDefault();
             return;
           }
-          if (this.getAttribute('href') === 'reddit.html') {
-            return;
-          }
-          if (this.getAttribute('href') === '#') {
-            e.preventDefault();
-          }
+          if (this.getAttribute('href') === 'reddit.html') return;
+          if (this.getAttribute('href') === '#') e.preventDefault();
           navLinks.forEach(l => l.classList.remove('active'));
-          if (!this.classList.contains('disabled')) {
-            this.classList.add('active');
-          }
+          if (!this.classList.contains('disabled')) this.classList.add('active');
         });
       });
     });
@@ -428,48 +422,60 @@
       const container = document.getElementById('newsContainer');
       container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
 
+      let articles = [];
       try {
         const response = await fetch(workerURL);
-        const articles = await response.json();
-
-        if (!Array.isArray(articles) || articles.length === 0) {
-          container.innerHTML = '<div class="error">No articles found about Kimi Antonelli.</div>';
+        let data;
+        try {
+          data = await response.json();
+        } catch (jsonErr) {
+          console.error('Failed to parse JSON:', jsonErr);
+          container.innerHTML = '<div class="error">Error parsing news data. Please try again later.</div>';
           return;
         }
 
-        container.innerHTML = '';
-
-        articles.forEach(article => {
-          const articleElement = document.createElement('article');
-          articleElement.className = 'article-card';
-          const cleanDescription = stripHTML(article.description).slice(0, 140) + "...";
-          const formattedDate = new Date(article.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-          const imageUrl = article.image || placeholderImage;
-
-          articleElement.innerHTML = `
-            <div class="article-image">
-              <img src="${imageUrl}" alt="${article.title}" loading="lazy">
-            </div>
-            <div class="article-content">
-              <div class="article-text-content">
-                <div class="article-meta">${formattedDate}</div>
-                <h2 class="article-title">
-                  <a href="${article.link}" target="_blank">${article.title}</a>
-                </h2>
-                <p class="article-excerpt">${cleanDescription}</p>
-              </div>
-              <div class="article-actions">
-                <a href="${article.link}" target="_blank" class="read-more">Read Article</a>
-              </div>
-            </div>
-          `;
-
-          container.appendChild(articleElement);
-        });
-      } catch (error) {
-        console.error('Error loading articles:', error);
+        if (Array.isArray(data)) articles = data;
+      } catch (fetchErr) {
+        console.error('Error fetching articles:', fetchErr);
         container.innerHTML = '<div class="error">Error loading news. Please try again later.</div>';
+        return;
       }
+
+      if (!Array.isArray(articles) || articles.length === 0) {
+        container.innerHTML = '<div class="error">No articles found about Kimi Antonelli.</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+
+      articles.forEach(article => {
+        const articleElement = document.createElement('article');
+        articleElement.className = 'article-card';
+        const cleanDescription = stripHTML(article.description).slice(0, 140) + "...";
+        const formattedDate = article.pubDate
+          ? new Date(article.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+          : '';
+        const imageUrl = article.image || placeholderImage;
+
+        articleElement.innerHTML = `
+          <div class="article-image">
+            <img src="${imageUrl}" alt="${article.title}" loading="lazy">
+          </div>
+          <div class="article-content">
+            <div class="article-text-content">
+              <div class="article-meta">${formattedDate}</div>
+              <h2 class="article-title">
+                <a href="${article.link}" target="_blank">${article.title}</a>
+              </h2>
+              <p class="article-excerpt">${cleanDescription}</p>
+            </div>
+            <div class="article-actions">
+              <a href="${article.link}" target="_blank" class="read-more">Read Article</a>
+            </div>
+          </div>
+        `;
+        container.appendChild(articleElement);
+      });
     }
 
     loadArticles();
