@@ -407,12 +407,12 @@
     </div>
   </main>
 
-  <!-- Invisible Turnstile widget -->
+  <!-- Turnstile widget -->
   <div id="cf-turnstile" 
        class="cf-challenge" 
        data-sitekey="0x4AAAAAABughzSZevIX1w74" 
        data-callback="onTurnstileSuccess" 
-       data-size="invisible">
+       data-size="compact">
   </div>
 
 <script>
@@ -425,43 +425,12 @@ function stripHTML(html) {
   return div.textContent || div.innerText || "";
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const navLinks = document.querySelectorAll('.nav-link');
-  
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      if (this.classList.contains('disabled')) {
-        e.preventDefault();
-        return;
-      }
-      
-      if (this.getAttribute('href') === 'reddit.html') {
-        return;
-      }
-      
-      if (this.getAttribute('href') === '#') {
-        e.preventDefault();
-      }
-      
-      navLinks.forEach(l => l.classList.remove('active'));
-      
-      if (!this.classList.contains('disabled')) {
-        this.classList.add('active');
-      }
-    });
-  });
-
-  // Wait for Turnstile script to load and render widget
-  waitForTurnstileAndRender();
-});
-
-// store token globally after Turnstile succeeds
 let turnstileToken = null;
-let turnstileRendered = false;
+let turnstileWidgetId = null;
 
 function onTurnstileSuccess(token) {
   turnstileToken = token;
-  loadArticles(); // now safe to fetch
+  loadArticles();
 }
 
 function waitForTurnstileAndRender() {
@@ -469,23 +438,20 @@ function waitForTurnstileAndRender() {
     setTimeout(waitForTurnstileAndRender, 100);
     return;
   }
-
-  if (!turnstileRendered) {
-    turnstile.render('#cf-turnstile', {
+  if (turnstileWidgetId === null) {
+    turnstileWidgetId = turnstile.render('#cf-turnstile', {
       sitekey: '0x4AAAAAABughzSZevIX1w74',
-      size: 'invisible',
+      size: 'compact',
       callback: onTurnstileSuccess
     });
-    turnstileRendered = true;
-    turnstile.execute('#cf-turnstile');
   }
 }
 
 async function loadArticles() {
   if (!turnstileToken) {
-    // If token not ready, execute widget again
-    if (window.turnstile && turnstileRendered) {
-      turnstile.execute('#cf-turnstile');
+    if (window.turnstile && turnstileWidgetId !== null) {
+      turnstile.reset(turnstileWidgetId);
+      turnstile.execute(turnstileWidgetId);
     }
     return;
   }
@@ -495,9 +461,7 @@ async function loadArticles() {
   
   try {
     const response = await fetch(workerURL, {
-      headers: {
-        'cf-turnstile-response': turnstileToken
-      }
+      headers: { 'cf-turnstile-response': turnstileToken }
     });
     const articles = await response.json();
     
@@ -518,7 +482,6 @@ async function loadArticles() {
         day: 'numeric',
         year: 'numeric'
       });
-      
       const imageUrl = article.image || placeholderImage;
       
       articleElement.innerHTML = `
@@ -546,6 +509,25 @@ async function loadArticles() {
     container.innerHTML = '<div class="error">Error loading news. Please try again later.</div>';
   }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const navLinks = document.querySelectorAll('.nav-link');
+  
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      if (this.classList.contains('disabled')) {
+        e.preventDefault();
+        return;
+      }
+      if (this.getAttribute('href') === 'reddit.html') return;
+      if (this.getAttribute('href') === '#') e.preventDefault();
+      navLinks.forEach(l => l.classList.remove('active'));
+      if (!this.classList.contains('disabled')) this.classList.add('active');
+    });
+  });
+
+  waitForTurnstileAndRender();
+});
 </script>
 </body>
 </html>
