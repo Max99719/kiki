@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kimi Antonelli Latest News</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<!-- Turnstile script -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
- * {
+  * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -383,10 +384,18 @@
       <h1>Kimi Antonelli Latest News</h1>
       <div class="nav-wrapper">
         <ul class="nav-menu">
-          <li class="nav-item"><a href="#" class="nav-link active">News</a></li>
-          <li class="nav-item"><a href="reddit.html" class="nav-link">Kimi on REDDIT</a></li>
-          <li class="nav-item"><a href="memes.html" class="nav-link">MEMES</a></li>
-          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">News</a>
+          </li>
+          <li class="nav-item">
+            <a href="reddit.html" class="nav-link">Kimi on REDDIT</a>
+          </li>
+          <li class="nav-item">
+            <a href="memes.html" class="nav-link">MEMES</a>
+          </li>
+          <li class="nav-item">
+            <a href="about.html" class="nav-link">About</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -398,8 +407,13 @@
     </div>
   </main>
 
-  <!-- Invisible widget container -->
-  <div id="cf-turnstile-container" style="display:none;"></div>
+  <!-- Compact Turnstile widget -->
+  <div id="cf-turnstile"
+       class="cf-turnstile"
+       data-sitekey="0x4AAAAAABughzSZevIX1w74"
+       data-callback="onTurnstileSuccess"
+       data-size="compact">
+  </div>
 
 <script>
 const workerURL = 'https://kiminews.malasadi578.workers.dev/';
@@ -412,77 +426,84 @@ function stripHTML(html) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Nav links
-  document.querySelectorAll('.nav-link').forEach(link => {
+  const navLinks = document.querySelectorAll('.nav-link');
+  
+  navLinks.forEach(link => {
     link.addEventListener('click', function(e) {
-      if (this.classList.contains('disabled')) { e.preventDefault(); return; }
-      if (this.getAttribute('href') === '#') e.preventDefault();
-      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-      if (!this.classList.contains('disabled')) this.classList.add('active');
+      if (this.classList.contains('disabled')) {
+        e.preventDefault();
+        return;
+      }
+      
+      if (this.getAttribute('href') === 'reddit.html') {
+        return;
+      }
+      
+      if (this.getAttribute('href') === '#') {
+        e.preventDefault();
+      }
+      
+      navLinks.forEach(l => l.classList.remove('active'));
+      
+      if (!this.classList.contains('disabled')) {
+        this.classList.add('active');
+      }
     });
   });
 
-  // Render and execute Turnstile once
+  // Only render Turnstile once
   if (window.turnstile) {
-    renderTurnstileOnce();
-  } else {
-    window.addEventListener('turnstileLoaded', renderTurnstileOnce);
+    turnstile.render('#cf-turnstile', {
+      sitekey: '0x4AAAAAABughzSZevIX1w74',
+      size: 'compact',
+      callback: onTurnstileSuccess
+    });
   }
 });
 
-// GLOBALS
+// store token globally after Turnstile succeeds
 let turnstileToken = null;
-let turnstileWidgetId = null;
-let turnstileExecuted = false;
 
 function onTurnstileSuccess(token) {
+  if (turnstileToken === token) return; // avoid duplicate fetch
   turnstileToken = token;
   loadArticles();
 }
 
-function renderTurnstileOnce() {
-  if (turnstileWidgetId) return; // already rendered
-
-  turnstileWidgetId = turnstile.render('#cf-turnstile-container', {
-    sitekey: '0x4AAAAAABughzSZevIX1w74',
-    size: 'invisible',
-    callback: onTurnstileSuccess
-  });
-
-  if (!turnstileExecuted) {
-    turnstile.execute(turnstileWidgetId);
-    turnstileExecuted = true;
-  }
-}
-
 async function loadArticles() {
+  if (!turnstileToken) return;
+
   const container = document.getElementById('newsContainer');
   container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
-
-  if (!turnstileToken) return; // wait for token
-
+  
   try {
     const response = await fetch(workerURL, {
-      headers: { 'cf-turnstile-response': turnstileToken }
+      headers: {
+        'cf-turnstile-response': turnstileToken
+      }
     });
     const articles = await response.json();
-
+    
     if (!Array.isArray(articles) || articles.length === 0) {
       container.innerHTML = '<div class="error">No articles found about Kimi Antonelli.</div>';
       return;
     }
-
+    
     container.innerHTML = '';
+    
     articles.forEach(article => {
       const articleElement = document.createElement('article');
       articleElement.className = 'article-card';
-
+      
       const cleanDescription = stripHTML(article.description).slice(0, 140) + "...";
       const formattedDate = new Date(article.pubDate).toLocaleDateString('en-US', {
-        month: 'short', day: 'numeric', year: 'numeric'
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
       });
+      
       const imageUrl = article.image || placeholderImage;
-
+      
       articleElement.innerHTML = `
         <div class="article-image">
           <img src="${imageUrl}" alt="${article.title}" loading="lazy">
@@ -490,7 +511,9 @@ async function loadArticles() {
         <div class="article-content">
           <div class="article-text-content">
             <div class="article-meta">${formattedDate}</div>
-            <h2 class="article-title"><a href="${article.link}" target="_blank">${article.title}</a></h2>
+            <h2 class="article-title">
+              <a href="${article.link}" target="_blank">${article.title}</a>
+            </h2>
             <p class="article-excerpt">${cleanDescription}</p>
           </div>
           <div class="article-actions">
@@ -498,6 +521,7 @@ async function loadArticles() {
           </div>
         </div>
       `;
+      
       container.appendChild(articleElement);
     });
   } catch (error) {
