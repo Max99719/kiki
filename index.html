@@ -1,380 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kimi Antonelli Latest News</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-<style>
- * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #f1f3f5;
-    color: #222222;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
-  
-  .header {
-    background: #ffffff;
-    border-bottom: 1px solid #e5e5e5;
-    padding: 12px 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
-  
-  h1 {
-    text-align: center;
-    margin: 0 0 12px 0;
-    font-family: 'Poppins', sans-serif;
-    font-size: 34px;
-    font-weight: 700;
-    color: #dc2626;
-    letter-spacing: -0.03em;
-  }
-  
-  .nav-wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-  
-  .nav-menu {
-    display: flex;
-    background: #ffffff;
-    border: 2px solid #ffffff;
-    border-radius: 10px;
-    padding: 4px;
-    gap: 12px;
-    list-style: none;
-    margin: 0 auto;
-    width: 70%;
-    max-width: 700px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  
-  .nav-menu::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .nav-item {
-    flex-shrink: 0;
-  }
-  
-  .nav-link {
-    display: block;
-    padding: 8px 16px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    color: #333333;
-    background: #f8f9fa;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-  }
-  
-  .nav-link:hover {
-    background: #dc2626;
-    color: #ffffff;
-    transform: scale(1.05);
-  }
-  
-  .nav-link.active {
-    background: #dc2626;
-    color: #ffffff;
-    font-weight: 700;
-  }
-  
-  .nav-link.disabled {
-    color: #aaaaaa;
-    cursor: not-allowed;
-  }
-  
-  .nav-link.disabled:hover {
-    background: #f8f9fa;
-    color: #aaaaaa;
-    transform: none;
-  }
-  
-  .coming-soon {
-    font-size: 11px;
-    background: #000000;
-    color: #ffffff;
-    padding: 3px 8px;
-    border-radius: 5px;
-    margin-left: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  
-  @media (max-width: 768px) {
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kimi Antonelli Latest News</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Turnstile script -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f1f3f5;
+      color: #222222;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
     .header {
-      padding: 10px 0;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 12px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-    
+
     .header-container {
-      padding: 0 12px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
     }
-    
+
     h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
+      text-align: center;
+      margin: 0 0 12px 0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: #dc2626;
+      letter-spacing: -0.03em;
     }
-    
-    .nav-menu {
-      padding: 3px;
-      gap: 8px;
-      border-radius: 8px;
-      width: 100%;
-      flex-wrap: wrap;
+
+    .nav-wrapper {
+      display: flex;
       justify-content: center;
+      width: 100%;
     }
-    
+
+    .nav-menu {
+      display: flex;
+      background: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 10px;
+      padding: 4px;
+      gap: 12px;
+      list-style: none;
+      margin: 0 auto;
+      width: 70%;
+      max-width: 700px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .nav-menu::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-item {
+      flex-shrink: 0;
+    }
+
     .nav-link {
-      padding: 6px 12px;
-      font-size: 15px;
+      display: block;
+      padding: 8px 16px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      color: #333333;
+      background: #f8f9fa;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
     }
-    
+
+    .nav-link:hover {
+      background: #dc2626;
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    .nav-link.active {
+      background: #dc2626;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .nav-link.disabled {
+      color: #aaaaaa;
+      cursor: not-allowed;
+    }
+
+    .nav-link.disabled:hover {
+      background: #f8f9fa;
+      color: #aaaaaa;
+      transform: none;
+    }
+
     .coming-soon {
-      font-size: 10px;
-      padding: 2px 6px;
+      font-size: 11px;
+      background: #000000;
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: 5px;
+      margin-left: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-  }
-  
-  @media (max-width: 480px) {
-    h1 {
-      font-size: 24px;
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 10px 0;
+      }
+      .header-container {
+        padding: 0 12px;
+      }
+      h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+      .nav-menu {
+        padding: 3px;
+        gap: 8px;
+        border-radius: 8px;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .nav-link {
+        padding: 6px 12px;
+        font-size: 15px;
+      }
+      .coming-soon {
+        font-size: 10px;
+        padding: 2px 6px;
+      }
     }
-    
-    .nav-link {
-      padding: 5px 10px;
-      font-size: 14px;
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 24px;
+      }
+      .nav-link {
+        padding: 5px 10px;
+        font-size: 14px;
+      }
     }
-  }
-  
-  .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 24px 48px;
-  }
-  
-  .articles-grid {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 32px;
-  }
-  
-  .article-card {
-    background: #ffffff;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    display: flex;
-    height: 260px;
-    width: 70%;
-    max-width: 700px;
-  }
-  
-  .article-card:hover {
-    transform: scale(1.03);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    border-color: #dc2626;
-  }
-  
-  .article-image {
-    width: 200px;
-    flex-shrink: 0;
-    background: #f5f5f5;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .article-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s ease;
-  }
-  
-  .article-card:hover .article-image img {
-    transform: scale(1.1);
-  }
-  
-  .article-content {
-    flex: 1;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-width: 0;
-  }
-  
-  .article-text-content {
-    flex: 1;
-    overflow: hidden;
-  }
-  
-  .article-meta {
-    font-size: 14px;
-    color: #dc2626;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-  }
-  
-  .article-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: #111111;
-    margin: 0 0 12px 0;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .article-title a {
-    color: inherit;
-    text-decoration: none;
-  }
-  
-  .article-title a:hover {
-    color: #dc2626;
-  }
-  
-  .article-excerpt {
-    font-size: 16px;
-    color: #555555;
-    line-height: 1.6;
-    margin: 0 0 16px 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .article-actions {
-    flex-shrink: 0;
-    margin-top: auto;
-  }
-  
-  .read-more {
-    display: inline-block;
-    background: linear-gradient(90deg, #dc2626, #b91c1c);
-    color: #ffffff;
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-family: 'Poppins', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    transition: background 0.3s ease, transform 0.3s ease;
-  }
-  
-  .read-more:hover {
-    background: linear-gradient(90deg, #b91c1c, #991b1b);
-    transform: scale(1.05);
-  }
-  
-  .loading, .error {
-    text-align: center;
-    padding: 48px 24px;
-    color: #555555;
-    background: #ffffff;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    font-size: 16px;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-  
-  .loading {
-    background: linear-gradient(90deg, #f8f9fa 25%, #e9ecef 50%, #f8f9fa 75%);
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite;
-  }
-  
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-  
-  @media (max-width: 768px) {
+
     .container {
-      padding: 0 16px 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
     }
-    
+
+    .articles-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+
     .article-card {
+      background: #ffffff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      display: flex;
+      height: 260px;
+      width: 70%;
+      max-width: 700px;
+    }
+
+    .article-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border-color: #dc2626;
+    }
+
+    .article-image {
+      width: 200px;
+      flex-shrink: 0;
+      background: #f5f5f5;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .article-card:hover .article-image img {
+      transform: scale(1.1);
+    }
+
+    .article-content {
+      flex: 1;
+      padding: 24px;
+      display: flex;
       flex-direction: column;
-      height: auto;
-      min-height: 340px;
-      width: 100%;
+      justify-content: space-between;
+      min-width: 0;
     }
-    
-    .article-image {
-      width: 100%;
-      height: 200px;
+
+    .article-text-content {
+      flex: 1;
+      overflow: hidden;
     }
-    
-    .article-content {
-      padding: 20px;
-    }
-    
-    .article-title {
-      font-size: 20px;
-      -webkit-line-clamp: 2;
-    }
-    
-    .article-excerpt {
-      font-size: 15px;
-      -webkit-line-clamp: 2;
-    }
-    
-    .read-more {
-      padding: 10px 20px;
+
+    .article-meta {
       font-size: 14px;
+      color: #dc2626;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
     }
-  }
-  
-  @media (min-width: 769px) and (max-width: 1024px) {
-    .article-image {
-      width: 180px;
+
+    .article-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #111111;
+      margin: 0 0 12px 0;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    
-    .article-content {
-      padding: 20px;
+
+    .article-title a {
+      color: inherit;
+      text-decoration: none;
     }
-    
-    .article-card {
-      height: 240px;
+
+    .article-title a:hover {
+      color: #dc2626;
     }
-  }
-</style>
+
+    .article-excerpt {
+      font-size: 16px;
+      color: #555555;
+      line-height: 1.6;
+      margin: 0 0 16px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .article-actions {
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+
+    .read-more {
+      display: inline-block;
+      background: linear-gradient(90deg, #dc2626, #b91c1c);
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .read-more:hover {
+      background: linear-gradient(90deg, #b91c1c, #991b1b);
+      transform: scale(1.05);
+    }
+
+    .loading,
+    .error {
+      text-align: center;
+      padding: 48px 24px;
+      color: #555555;
+      background: #ffffff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      font-size: 16px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .loading {
+      background: linear-gradient(90deg, #f8f9fa 25%, #e9ecef 50%, #f8f9fa 75%);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 16px 40px;
+      }
+      .article-card {
+        flex-direction: column;
+        height: auto;
+        min-height: 340px;
+        width: 100%;
+      }
+      .article-image {
+        width: 100%;
+        height: 200px;
+      }
+      .article-content {
+        padding: 20px;
+      }
+      .article-title {
+        font-size: 20px;
+        -webkit-line-clamp: 2;
+      }
+      .article-excerpt {
+        font-size: 15px;
+        -webkit-line-clamp: 2;
+      }
+      .read-more {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .article-image {
+        width: 180px;
+      }
+      .article-content {
+        padding: 20px;
+      }
+      .article-card {
+        height: 240px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="header">
@@ -398,109 +393,117 @@
       </div>
     </div>
   </header>
-  
+
   <main class="container">
     <div class="articles-grid" id="newsContainer">
       <div class="loading">Loading Kimi Antonelli news...</div>
     </div>
   </main>
 
-<script>
-const workerURL = 'https://kiminews.malasadi578.workers.dev/';
-const placeholderImage = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80';
+  <!-- Compact Turnstile widget -->
+  <div id="cf-turnstile" class="cf-turnstile"
+       data-sitekey="0x4AAAAAABughzSZevIX1w74"
+       data-callback="onTurnstileSuccess"
+       data-size="compact">
+  </div>
 
-function stripHTML(html) {
-  const div = document.createElement("div");
-  div.innerHTML = html;
-  return div.textContent || div.innerText || "";
-}
+  <script>
+    const workerURL = 'https://kiminews.malasadi578.workers.dev/';
+    const placeholderImage = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80';
 
-document.addEventListener('DOMContentLoaded', async function() {
-  const navLinks = document.querySelectorAll('.nav-link');
-  
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      if (this.classList.contains('disabled')) {
-        e.preventDefault();
-        return;
-      }
-      if (this.getAttribute('href') === '#') e.preventDefault();
-      navLinks.forEach(l => l.classList.remove('active'));
-      if (!this.classList.contains('disabled')) this.classList.add('active');
-    });
-  });
-
-  // Request a Turnstile token invisibly
-  try {
-    const tokenResponse = await fetch(`https://challenges.cloudflare.com/turnstile/v0/siteverify?sitekey=0x4AAAAAABughzSZevIX1w74`);
-    const tokenData = await tokenResponse.json();
-    const token = tokenData.token; // assume server returns a valid token for this domain
-
-    // Load articles using server-side Turnstile validation
-    loadArticles(token);
-  } catch (err) {
-    console.error("Error getting Turnstile token:", err);
-    document.getElementById('newsContainer').innerHTML = '<div class="error">Unable to verify security token. Please reload.</div>';
-  }
-});
-
-async function loadArticles(turnstileToken) {
-  const container = document.getElementById('newsContainer');
-  container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
-  
-  try {
-    const response = await fetch(workerURL, {
-      headers: {
-        'cf-turnstile-response': turnstileToken
-      }
-    });
-    const articles = await response.json();
-    
-    if (!Array.isArray(articles) || articles.length === 0) {
-      container.innerHTML = '<div class="error">No articles found about Kimi Antonelli.</div>';
-      return;
+    function stripHTML(html) {
+      const div = document.createElement("div");
+      div.innerHTML = html;
+      return div.textContent || div.innerText || "";
     }
-    
-    container.innerHTML = '';
-    
-    articles.forEach(article => {
-      const articleElement = document.createElement('article');
-      articleElement.className = 'article-card';
-      
-      const cleanDescription = stripHTML(article.description).slice(0, 140) + "...";
-      const formattedDate = new Date(article.pubDate).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          if (this.classList.contains('disabled')) {
+            e.preventDefault();
+            return;
+          }
+          if (this.getAttribute('href') === 'reddit.html') return;
+          if (this.getAttribute('href') === '#') e.preventDefault();
+          navLinks.forEach(l => l.classList.remove('active'));
+          if (!this.classList.contains('disabled')) this.classList.add('active');
+        });
       });
-      
-      const imageUrl = article.image || placeholderImage;
-      
-      articleElement.innerHTML = `
-        <div class="article-image">
-          <img src="${imageUrl}" alt="${article.title}" loading="lazy">
-        </div>
-        <div class="article-content">
-          <div class="article-text-content">
-            <div class="article-meta">${formattedDate}</div>
-            <h2 class="article-title">
-              <a href="${article.link}" target="_blank">${article.title}</a>
-            </h2>
-            <p class="article-excerpt">${cleanDescription}</p>
-          </div>
-          <div class="article-actions">
-            <a href="${article.link}" target="_blank" class="read-more">Read Article</a>
-          </div>
-        </div>
-      `;
-      
-      container.appendChild(articleElement);
+
+      // Only render Turnstile once
+      if (window.turnstile) {
+        turnstile.render('#cf-turnstile', {
+          sitekey: '0x4AAAAAABughzSZevIX1w74',
+          size: 'compact',
+          callback: onTurnstileSuccess
+        });
+      }
     });
-  } catch (error) {
-    console.error('Error loading articles:', error);
-    container.innerHTML = '<div class="error">Error loading news. Please try again later.</div>';
-  }
-}
-</script>
+
+    let turnstileToken = null;
+
+    function onTurnstileSuccess(token) {
+      if (turnstileToken === token) return;
+      turnstileToken = token;
+      loadArticles();
+    }
+
+    async function loadArticles() {
+      if (!turnstileToken) return;
+      const container = document.getElementById('newsContainer');
+      container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
+
+      try {
+        const response = await fetch(workerURL, {
+          headers: { 'cf-turnstile-response': turnstileToken }
+        });
+        const articles = await response.json();
+
+        if (!Array.isArray(articles) || articles.length === 0) {
+          container.innerHTML = '<div class="error">No articles found about Kimi Antonelli.</div>';
+          return;
+        }
+
+        container.innerHTML = '';
+
+        articles.forEach(article => {
+          const articleElement = document.createElement('article');
+          articleElement.className = 'article-card';
+
+          const cleanDescription = stripHTML(article.description).slice(0, 140) + "...";
+          const formattedDate = new Date(article.pubDate).toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric'
+          });
+          const imageUrl = article.image || placeholderImage;
+
+          articleElement.innerHTML = `
+            <div class="article-image">
+              <img src="${imageUrl}" alt="${article.title}" loading="lazy">
+            </div>
+            <div class="article-content">
+              <div class="article-text-content">
+                <div class="article-meta">${formattedDate}</div>
+                <h2 class="article-title">
+                  <a href="${article.link}" target="_blank">${article.title}</a>
+                </h2>
+                <p class="article-excerpt">${cleanDescription}</p>
+              </div>
+              <div class="article-actions">
+                <a href="${article.link}" target="_blank" class="read-more">Read Article</a>
+              </div>
+            </div>
+          `;
+
+          container.appendChild(articleElement);
+        });
+
+      } catch (error) {
+        console.error('Error loading articles:', error);
+        container.innerHTML = '<div class="error">Error loading news. Please try again later.</div>';
+      }
+    }
+  </script>
 </body>
 </html>
