@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kimi Antonelli Latest News</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-<!-- Turnstile script -->
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
-  * {
+ * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -407,17 +405,9 @@
     </div>
   </main>
 
-  <!-- Compact Turnstile widget -->
-  <div id="cf-turnstile"
-       class="cf-turnstile"
-       data-sitekey="0x4AAAAAABughzSZevIX1w74"
-       data-callback="onTurnstileSuccess"
-       data-size="compact">
-  </div>
-
 <script>
 const workerURL = 'https://kiminews.malasadi578.workers.dev/';
-const placeholderImage = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80';
+const placeholderImage = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80';
 
 function stripHTML(html) {
   const div = document.createElement("div");
@@ -425,7 +415,7 @@ function stripHTML(html) {
   return div.textContent || div.innerText || "";
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   const navLinks = document.querySelectorAll('.nav-link');
   
   navLinks.forEach(link => {
@@ -434,45 +424,27 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         return;
       }
-      
-      if (this.getAttribute('href') === 'reddit.html') {
-        return;
-      }
-      
-      if (this.getAttribute('href') === '#') {
-        e.preventDefault();
-      }
-      
+      if (this.getAttribute('href') === '#') e.preventDefault();
       navLinks.forEach(l => l.classList.remove('active'));
-      
-      if (!this.classList.contains('disabled')) {
-        this.classList.add('active');
-      }
+      if (!this.classList.contains('disabled')) this.classList.add('active');
     });
   });
 
-  // Only render Turnstile once
-  if (window.turnstile) {
-    turnstile.render('#cf-turnstile', {
-      sitekey: '0x4AAAAAABughzSZevIX1w74',
-      size: 'compact',
-      callback: onTurnstileSuccess
-    });
+  // Request a Turnstile token invisibly
+  try {
+    const tokenResponse = await fetch(`https://challenges.cloudflare.com/turnstile/v0/siteverify?sitekey=0x4AAAAAABughzSZevIX1w74`);
+    const tokenData = await tokenResponse.json();
+    const token = tokenData.token; // assume server returns a valid token for this domain
+
+    // Load articles using server-side Turnstile validation
+    loadArticles(token);
+  } catch (err) {
+    console.error("Error getting Turnstile token:", err);
+    document.getElementById('newsContainer').innerHTML = '<div class="error">Unable to verify security token. Please reload.</div>';
   }
 });
 
-// store token globally after Turnstile succeeds
-let turnstileToken = null;
-
-function onTurnstileSuccess(token) {
-  if (turnstileToken === token) return; // avoid duplicate fetch
-  turnstileToken = token;
-  loadArticles();
-}
-
-async function loadArticles() {
-  if (!turnstileToken) return;
-
+async function loadArticles(turnstileToken) {
   const container = document.getElementById('newsContainer');
   container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
   
