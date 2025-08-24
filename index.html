@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
-* {
+ * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -398,7 +398,7 @@
     </div>
   </main>
 
-  <!-- Widget container is empty; will be rendered via JS -->
+  <!-- Invisible widget container -->
   <div id="cf-turnstile-container" style="display:none;"></div>
 
 <script>
@@ -412,7 +412,7 @@ function stripHTML(html) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Nav active state
+  // Nav links
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function(e) {
       if (this.classList.contains('disabled')) { e.preventDefault(); return; }
@@ -422,42 +422,44 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Initialize Turnstile once
-  waitForTurnstileAndLoadArticles();
+  // Render and execute Turnstile once
+  if (window.turnstile) {
+    renderTurnstileOnce();
+  } else {
+    window.addEventListener('turnstileLoaded', renderTurnstileOnce);
+  }
 });
 
 // GLOBALS
 let turnstileToken = null;
 let turnstileWidgetId = null;
+let turnstileExecuted = false;
 
 function onTurnstileSuccess(token) {
   turnstileToken = token;
-  loadArticles(); // fetch only after token ready
+  loadArticles();
 }
 
-function waitForTurnstileAndLoadArticles() {
-  if (!window.turnstile) {
-    setTimeout(waitForTurnstileAndLoadArticles, 100);
-    return;
-  }
+function renderTurnstileOnce() {
+  if (turnstileWidgetId) return; // already rendered
 
-  if (!turnstileWidgetId) {
-    turnstileWidgetId = turnstile.render('#cf-turnstile-container', {
-      sitekey: '0x4AAAAAABughzSZevIX1w74',
-      size: 'compact', // valid size
-      callback: onTurnstileSuccess
-    });
-  }
+  turnstileWidgetId = turnstile.render('#cf-turnstile-container', {
+    sitekey: '0x4AAAAAABughzSZevIX1w74',
+    size: 'invisible',
+    callback: onTurnstileSuccess
+  });
 
-  // Execute the widget to get token
-  turnstile.execute(turnstileWidgetId);
+  if (!turnstileExecuted) {
+    turnstile.execute(turnstileWidgetId);
+    turnstileExecuted = true;
+  }
 }
 
 async function loadArticles() {
   const container = document.getElementById('newsContainer');
   container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
 
-  if (!turnstileToken) return; // wait until token ready
+  if (!turnstileToken) return; // wait for token
 
   try {
     const response = await fetch(workerURL, {
