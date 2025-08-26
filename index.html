@@ -41,6 +41,9 @@
   <script>
     const workerURL = 'https://kimi2.malasadi578.workers.dev/';
     const placeholderImage = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80';
+    const CACHE_KEY = 'kimiAntonelliNewsCache';
+    const CACHE_TIME_KEY = 'kimiAntonelliNewsCacheTime';
+    const CACHE_TTL_MS = 5 * 60 * 1000;
 
     function stripHTML(html) {
       const div = document.createElement("div");
@@ -69,6 +72,54 @@
       container.innerHTML = '<div class="loading">Loading Kimi Antonelli news...</div>';
 
       let articles = [];
+
+      // ---- 5-minute localStorage cache (use if fresh, else fetch) ----
+      try {
+        const cachedJSON = localStorage.getItem(CACHE_KEY);
+        const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+        if (cachedJSON && cachedTime && (Date.now() - parseInt(cachedTime, 10) < CACHE_TTL_MS)) {
+          const cachedData = JSON.parse(cachedJSON);
+          if (Array.isArray(cachedData) && cachedData.length > 0) {
+            articles = cachedData;
+            container.innerHTML = '';
+            articles.forEach(article => {
+              if (article.title && /kimi antonelli|antonelli/i.test(article.title)) {
+                const articleElement = document.createElement('article');
+                articleElement.className = 'article-card';
+                const cleanDescription = stripHTML(article.description).slice(0, 140) + "...";
+                const formattedDate = article.pubDate
+                  ? new Date(article.pubDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                  : '';
+                const imageUrl = article.image || placeholderImage;
+
+                articleElement.innerHTML = `
+                  <div class="article-image">
+                    <img src="${imageUrl}" alt="${article.title}" loading="lazy">
+                  </div>
+                  <div class="article-content">
+                    <div class="article-text-content">
+                      <div class="article-meta">${formattedDate}</div>
+                      <h2 class="article-title">
+                        <a href="${article.link}" target="_blank">${article.title}</a>
+                      </h2>
+                      <p class="article-excerpt">${cleanDescription}</p>
+                    </div>
+                    <div class="article-actions">
+                      <a href="${article.link}" target="_blank" class="read-more">Read Article</a>
+                    </div>
+                  </div>
+                `;
+                container.appendChild(articleElement);
+              }
+            });
+            return;
+          }
+        }
+      } catch (e) {
+        console.error('Cache read failed, proceeding to fetch:', e);
+      }
+      // ---- end cache-read path ----
+
       try {
         const response = await fetch(workerURL);
         let data;
@@ -90,6 +141,14 @@
       if (!Array.isArray(articles) || articles.length === 0) {
         container.innerHTML = '<div class="error">No articles found about Kimi Antonelli.</div>';
         return;
+      }
+
+      // Store fresh data in cache with timestamp
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(articles));
+        localStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
+      } catch (e) {
+        console.error('Failed to write cache:', e);
       }
 
       container.innerHTML = '';
