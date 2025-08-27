@@ -208,20 +208,16 @@
     margin-top: 32px;
   }
 
-#memes-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px; /* space between meme cards */
-  padding: 10px;
-}
-
-.meme-card {
-  border: 1px solid #ccc;   /* border around each meme */
-  border-radius: 8px;       /* rounded corners */
-  padding: 8px;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* subtle shadow */
-}
+  .meme-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    width: 70%;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
 
   .meme-card:hover {
     transform: scale(1.02);
@@ -229,12 +225,13 @@
     border-color: #dc2626;
   }
 
-.meme-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 6px; /* match card rounding */
-}
+  .meme-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s ease;
+  }
 
   .meme-card:hover .meme-image {
     transform: scale(1.01);
@@ -250,7 +247,7 @@
     }
 
     .memes-grid {
-      gap: 24px;
+      gap: 30px;
     }
   }
 
