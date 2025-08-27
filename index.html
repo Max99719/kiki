@@ -83,7 +83,7 @@
             articles = cachedData;
             container.innerHTML = '';
             articles.forEach(article => {
-              if (article.title && /kimi antonelli|antonelli/i.test(article.title)) {
+              if (article.title && /kimi antonelli|antonelli/i.test(article.title)   && article.link!="https://news.google.com/rss/articles/CBMihwFBVV95cUxQUHJVRG5qbTd1U1J1YXVYUjBNVTE0MnFxZUNJUjllNzF4MjlWU0hpT2hxczUyZ1Qyd0NGb19lbUxYUkE0aDBuNjktaEZYZGxpcUFsOVVwcElhRVJPbGlHMW5rZmJCalpoYWJIbFRxSDBFOGFnaU5VS1g4bFVBVVp2dWtEMkR4Szg?oc=5"       ) {
                 const articleElement = document.createElement('article');
                 articleElement.className = 'article-card';
                 const cleanDescription = stripHTML(article.description).slice(0, 140) + "...";
