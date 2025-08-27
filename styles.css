@@ -331,11 +331,11 @@
         padding: 18px;
       }
       .article-title {
-        font-size: 16px;
+        font-size: 18px;
         -webkit-line-clamp: 4;
       }
       .article-excerpt {
-        font-size: 17px;
+        font-size: 15px;
         -webkit-line-clamp: 2;
       }
       .read-more {
