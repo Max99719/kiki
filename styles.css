@@ -328,11 +328,11 @@
         height: 200px;
       }
       .article-content {
-        padding: 20px;
+        padding: 18px;
       }
       .article-title {
-        font-size: 17px;
-        -webkit-line-clamp: 3;
+        font-size: 16px;
+        -webkit-line-clamp: 4;
       }
       .article-excerpt {
         font-size: 15px;
