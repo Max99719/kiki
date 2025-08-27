@@ -247,7 +247,7 @@
     }
 
     .memes-grid {
-      gap: 43px;
+      gap: 53px;
     }
   }
 
@@ -330,6 +330,10 @@
 
         container.appendChild(memeCard);
       });
+
+        container.insertAdjacentHTML('beforeend', '<br><br>');
+
+
     }
 
     document.addEventListener('DOMContentLoaded', loadMemes);
